@@ -1,183 +1,368 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+﻿<p align="center">
+  <img src="https://nestjs.com/img/logo-small.svg" width="80" alt="NestJS" />
 </p>
 
-# Microblog CMS
+<h1 align="center">Microblog CMS</h1>
 
-A small CMS for microblogging: write, tag, publish, and comment.  
-Built with NestJS + Handlebars SSR + Tailwind CSS + MySQL 8.
+<p align="center">
+  A personal blogging platform built with <strong>NestJS 11</strong> · <strong>Handlebars SSR</strong> · <strong>Tailwind CSS v4</strong> · <strong>MySQL 8</strong>
+</p>
 
-## Quick Start
+<p align="center">
+  <img src="https://img.shields.io/badge/NestJS-v11-E0234E?logo=nestjs" alt="NestJS"/>
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss" alt="Tailwind"/>
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql" alt="MySQL"/>
+</p>
 
-See [specs/001-microblog-cms/quickstart.md](specs/001-microblog-cms/quickstart.md) for full setup instructions.
+---
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Screenshots](#screenshots)
+3. [Features](#features)
+4. [Tech Stack](#tech-stack)
+5. [Getting Started](#getting-started)
+6. [Environment Variables](#environment-variables)
+7. [Database & Migrations](#database--migrations)
+8. [Project Structure](#project-structure)
+9. [URL Routes](#url-routes)
+10. [Authentication](#authentication)
+11. [Roles & Permissions](#roles--permissions)
+12. [npm Scripts](#npm-scripts)
+
+---
+
+## Overview
+
+Microblog CMS is a server-side-rendered personal blog platform. Authors write posts, tag them, and submit them for admin approval before they go live. Visitors browse posts by tag, leave comments (moderated), and read a rich About Me page.
+
+---
+
+## Screenshots
+
+### Homepage
+
+Post grid (3 columns, max 15 posts) with tag sidebar and pagination.
+
+![Homepage](docs/screenshots/home.png)
+
+### Tag Page
+
+Posts filtered by tag, paginated 9 per page with active-page highlight.
+
+![Tag page](docs/screenshots/tag.png)
+
+### Post Detail
+
+Full article with author, date, tag chips, body, and comment form.
+
+![Post detail](docs/screenshots/post.png)
+
+### About Me
+
+Detailed bio page with tech timeline (Web / SAP / Java), project experience, and contact links.
+
+![About Me](docs/screenshots/about.png)
+
+### Login
+
+JWT-based login with HTTP-only cookie auth.
+
+![Login](docs/screenshots/login.png)
+
+### Register
+
+New account registration with validation.
+
+![Register](docs/screenshots/register.png)
+
+---
+
+## Features
+
+| Area | Detail |
+|---|---|
+| **Public** | Homepage (15 posts/page), tag pages (9/page), post detail, About Me |
+| **Auth** | Register, login, logout, JWT access + refresh token rotation |
+| **Comments** | Guests/users can submit comments; held for admin approval |
+| **Dashboard** | Authenticated users: write posts, view status (draft / pending / published) |
+| **Admin** | Admin role: approve/reject posts and comments |
+| **Security** | Helmet, CSRF (`csurf`), rate limiting (`@nestjs/throttler`), bcrypt |
+| **CSS** | Tailwind CSS v4 CLI build, minified output |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Runtime | Node.js v22 |
+| Framework | NestJS v11 (`@nestjs/platform-express`) |
+| Language | TypeScript 5.x — `strict: true` |
+| View Engine | Handlebars (express-handlebars), SSR |
+| CSS | Tailwind CSS v4 (`@tailwindcss/cli`) |
+| ORM | TypeORM v0.3 — `synchronize: false`, explicit migrations |
+| Database | MySQL 8.0 (via Docker Compose) |
+| Auth | JWT (access + refresh), `passport-jwt`, HTTP-only cookies |
+| Session | `express-session` + `connect-flash` |
+| Security | `helmet`, `csurf`, `@nestjs/throttler` |
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js v20+
-- Docker Desktop (for MySQL)
-- Copy `.env.example` → `.env` and fill in values
+- **Node.js** v20+
+- **Docker Desktop** (for MySQL)
 
-### Setup
+### Installation
 
 ```bash
-# 1. Install dependencies
+# 1. Clone and install
+git clone <repo-url>
+cd microblog_nestjs
 npm install
 
-# 2. Start MySQL
+# 2. Copy env file and fill in secrets
+cp .env.example .env
+
+# 3. Start MySQL via Docker
 docker-compose up -d
 
-# 3. Run migrations
+# 4. Run database migrations (creates tables + seeds data)
 npm run migration:run
 
-# 4. Build CSS
+# 5. Build Tailwind CSS
 npm run build:css
 
-# 5. Start dev server
+# 6. Start the dev server
 npm run start:dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open **http://localhost:3000** in your browser.
 
-## npm Scripts
+**Default admin account** (created by seed migration):
+- Email: `admin@example.com`
+- Password: `Admin1234!`
 
-| Script | Description |
-|--------|-------------|
-| `npm run start:dev` | Start NestJS in watch mode |
-| `npm run build` | Compile TypeScript |
-| `npm run build:css` | Build Tailwind CSS once |
-| `npm run watch:css` | Watch and rebuild Tailwind CSS |
-| `npm run migration:generate -- src/migrations/NAME` | Generate a new migration |
-| `npm run migration:run` | Run all pending migrations |
-| `npm run migration:revert` | Revert the last migration |
-| `npm run lint` | Run ESLint |
-| `npm test` | Run Jest tests |
+---
 
-## Architecture
+## Environment Variables
 
-- **Framework**: NestJS v11 with `@nestjs/platform-express`
-- **View Engine**: Handlebars (express-handlebars) — SSR, no client-side framework
-- **CSS**: Tailwind CSS v4, built via CLI
-- **Database**: MySQL 8.0 via TypeORM v0.3 (`synchronize: false`)
-- **Auth**: JWT in HTTP-only cookies, bcrypt password hashing, refresh token rotation
-- **Security**: helmet, csurf, method-override, @nestjs/throttler
+Copy `.env.example` to `.env` and set the following:
+
+| Variable | Description | Example |
+|---|---|---|
+| `PORT` | HTTP port | `3000` |
+| `NODE_ENV` | Environment | `development` |
+| `DB_HOST` | MySQL host | `localhost` |
+| `DB_PORT` | MySQL port | `3306` |
+| `DB_USERNAME` | DB user | `root` |
+| `DB_PASSWORD` | DB password | `yourpassword` |
+| `DB_NAME` | Database name | `microblog` |
+| `JWT_ACCESS_SECRET` | Secret for access tokens (min 32 chars) | `change-me-32chars-minimum` |
+| `JWT_REFRESH_SECRET` | Secret for refresh tokens (min 32 chars) | `change-me-32chars-minimum` |
+| `SESSION_SECRET` | express-session secret | `session-secret` |
+| `COOKIE_SECRET` | cookie-parser signing secret | `cookie-secret` |
+
+> **Security note**: Never commit `.env` to version control. It is in `.gitignore`.
+
+---
+
+## Database & Migrations
+
+TypeORM is configured with `synchronize: false`. All schema changes must go through migrations.
+
+```bash
+# Run all pending migrations
+npm run migration:run
+
+# Generate a new migration (after editing entities)
+npm run migration:generate -- src/migrations/MyMigrationName
+
+# Revert the last migration
+npm run migration:revert
+```
+
+### Migration history
+
+| # | File | Description |
+|---|---|---|
+| 001 | `CreateUsers` | Users table |
+| 002 | `CreatePosts` | Posts table |
+| 003 | `CreateTags` | Tags table |
+| 004 | `CreatePostTags` | Post ↔ tag pivot |
+| 005 | `CreateComments` | Comments table |
+| 006 | `CreatePages` | Static pages table |
+| 007 | `CreateRefreshTokens` | Refresh token table |
+| 008 | `SeedAdmin` | Admin user + initial tags |
+| 009 | `SeedPosts` | Initial 5 sample posts |
+| 010 | `SeedMorePosts` | 48 additional posts (10+ per tag) |
+| 011 | `UpdateAboutPage` | Detailed About Me content |
+
+---
 
 ## Project Structure
 
 ```
-src/
-  config/          # DB config, TypeORM DataSource
-  entities/        # TypeORM entities
-  migrations/      # SQL migrations
-  modules/
-    auth/          # JWT auth, guards, strategies
-    admin/         # Admin moderation
-    comments/      # Comment submission
-    pages/         # Static pages (About)
-    posts/         # Post CRUD
-    tags/          # Tag browsing
-    users/         # User accounts, dashboard
-  common/          # Filters, decorators, helpers
-views/             # Handlebars templates
-public/            # Static assets (CSS, JS)
+microblog_nestjs/
+├── src/
+│   ├── config/              # TypeORM DataSource, DB config
+│   ├── entities/            # TypeORM entity classes
+│   │   ├── user.entity.ts
+│   │   ├── post.entity.ts
+│   │   ├── tag.entity.ts
+│   │   ├── comment.entity.ts
+│   │   ├── page.entity.ts
+│   │   └── refresh-token.entity.ts
+│   ├── migrations/          # Migration files (run in order)
+│   ├── modules/
+│   │   ├── auth/            # JWT auth, guards, strategies, CSRF
+│   │   ├── admin/           # Post & comment moderation
+│   │   ├── comments/        # Public comment submission
+│   │   ├── pages/           # Static pages (About Me)
+│   │   ├── posts/           # Post browsing + authoring
+│   │   ├── tags/            # Tag browsing with pagination
+│   │   └── users/           # User accounts + dashboard
+│   ├── common/
+│   │   ├── filters/         # HttpExceptionFilter (404, CSRF, 500)
+│   │   ├── guards/          # JwtAuthGuard, RolesGuard
+│   │   ├── helpers/         # Handlebars helpers (formatDate, tagIcon)
+│   │   └── middleware/      # UserLocalsMiddleware (injects user into templates)
+│   ├── styles/
+│   │   └── input.css        # Tailwind CSS entry point
+│   ├── app.module.ts        # Root module, middleware config
+│   └── main.ts              # Bootstrap, Express middleware stack
+│
+├── views/
+│   ├── layouts/
+│   │   └── main.hbs         # Global layout (header, nav, footer)
+│   ├── partials/
+│   │   ├── nav.hbs          # Navigation bar
+│   │   ├── post-card.hbs    # Post preview card
+│   │   ├── pagination.hbs   # Page navigation
+│   │   └── sidebar-right.hbs # Tags widget
+│   ├── pages/
+│   │   ├── home.hbs         # Homepage
+│   │   ├── post.hbs         # Post detail
+│   │   └── about.hbs        # About Me
+│   ├── auth/
+│   │   ├── login.hbs
+│   │   └── register.hbs
+│   ├── dashboard/           # Authenticated user dashboard
+│   ├── admin/               # Admin moderation views
+│   └── errors/              # 404, 500 error pages
+│
+├── public/
+│   └── css/
+│       └── tailwind.css     # Built CSS (do not edit manually)
+│
+├── docker-compose.yml       # MySQL 8 container
+├── .env.example             # Environment variable template
+└── nest-cli.json
 ```
-
-## Constitution
-
-See [.specify/memory/constitution.md](.specify/memory/constitution.md) for the project's governing principles.
 
 ---
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## URL Routes
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Public
 
-## Description
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/` | Homepage — latest 15 posts, paginated |
+| `GET` | `/?page=N` | Homepage page N |
+| `GET` | `/posts/:slug` | Post detail page |
+| `GET` | `/tags/:slug` | Posts filtered by tag (9/page) |
+| `GET` | `/tags/:slug?page=N` | Tag page N |
+| `GET` | `/about` | About Me page |
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Auth
 
-## Project setup
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/login` | Login form |
+| `POST` | `/login` | Submit login credentials |
+| `GET` | `/register` | Register form |
+| `POST` | `/register` | Submit registration |
+| `POST` | `/logout` | Clear auth cookies |
+| `POST` | `/auth/refresh` | Rotate access token using refresh token |
 
-```bash
-$ npm install
-```
+### Authenticated Users
 
-## Compile and run the project
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/dashboard` | User's own posts + status |
+| `GET` | `/posts/new` | New post form |
+| `POST` | `/posts` | Create post (saved as `draft`) |
+| `GET` | `/posts/:id/edit` | Edit post form |
+| `POST` | `/posts/:id` | Update post |
+| `POST` | `/posts/:id/submit` | Submit post for review |
+| `POST` | `/comments` | Submit a comment |
 
-```bash
-# development
-$ npm run start
+### Admin Only
 
-# watch mode
-$ npm run start:dev
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/admin` | Admin dashboard |
+| `GET` | `/admin/posts` | All pending posts |
+| `POST` | `/admin/posts/:id/publish` | Approve post |
+| `POST` | `/admin/posts/:id/reject` | Reject post |
+| `GET` | `/admin/comments` | Pending comments |
+| `POST` | `/admin/comments/:id/approve` | Approve comment |
+| `POST` | `/admin/comments/:id/reject` | Reject comment |
 
-# production mode
-$ npm run start:prod
-```
+---
 
-## Run tests
+## Authentication
 
-```bash
-# unit tests
-$ npm run test
+The app uses **JWT with HTTP-only cookies** — no localStorage tokens.
 
-# e2e tests
-$ npm run test:e2e
+### Flow
 
-# test coverage
-$ npm run test:cov
-```
+1. User `POST /login` with email + password
+2. Server validates credentials, issues:
+   - `access_token` cookie (short-lived, 15 min)
+   - `refresh_token` cookie (long-lived, 7 days, hashed in DB)
+3. Every request: `UserLocalsMiddleware` reads `access_token`, verifies it, and injects `user` into `res.locals` for all Handlebars templates
+4. Protected routes use `JwtAuthGuard` (reads from cookie via `passport-jwt`)
+5. On expiry: client calls `POST /auth/refresh` — old refresh token is revoked and a new pair is issued (rotation)
 
-## Deployment
+### CSRF Protection
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+All `POST` forms include a hidden `_csrf` field. The token is generated server-side by `csurf` and injected into `res.locals.csrfToken` on every request.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+## Roles & Permissions
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+| Role | Capabilities |
+|---|---|
+| **Guest** | Browse posts, view tags, read About Me |
+| **User** (registered) | All guest + write posts (draft), submit for review, comment |
+| **Admin** | All user + approve/reject posts, approve/reject comments |
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## npm Scripts
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+| Script | Description |
+|---|---|
+| `npm run start:dev` | Start NestJS in watch mode (ts-node) |
+| `npm run build` | Compile TypeScript to `dist/` |
+| `npm run start:prod` | Run compiled `dist/main.js` |
+| `npm run build:css` | Build Tailwind CSS once (minified) |
+| `npm run watch:css` | Watch and rebuild CSS on changes |
+| `npm run migration:run` | Run all pending migrations |
+| `npm run migration:revert` | Revert the last migration |
+| `npm run migration:generate -- src/migrations/NAME` | Generate migration from entity diff |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run Jest unit tests |
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+*Built with NestJS & Tailwind CSS — © 2026*
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
