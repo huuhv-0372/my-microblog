@@ -1,0 +1,54 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Posts Pending Review <span class="text-gray-400 text-lg">({{total}})</span></h1>
+    <a href="/admin" class="text-sm text-gray-500 hover:text-indigo-600">← Back to Dashboard</a>
+  </div>
+
+  {{#if posts.length}}
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Title</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Author</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Tags</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Submitted</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {{#each posts}}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-900">{{title}}</td>
+          <td class="px-4 py-3 text-gray-600">{{author.username}}</td>
+          <td class="px-4 py-3">
+            <div class="flex flex-wrap gap-1">
+              {{#each tags}}
+              <span class="text-xs bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full">{{name}}</span>
+              {{/each}}
+            </div>
+          </td>
+          <td class="px-4 py-3 text-gray-500">{{formatDate createdAt}}</td>
+          <td class="px-4 py-3">
+            <div class="flex gap-2">
+              <form action="/admin/posts/{{id}}/publish" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                <button type="submit" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Publish</button>
+              </form>
+              <form action="/admin/posts/{{id}}/reject" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                <button type="submit" class="text-xs bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Reject</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}
+  <div class="text-center py-12 text-gray-400 bg-white border border-gray-200 rounded-lg">
+    <p>No posts pending review. 🎉</p>
+  </div>
+  {{/if}}
+</div>

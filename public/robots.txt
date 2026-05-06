@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /posts/new
+Disallow: /posts/*/edit
+Disallow: /auth/refresh
+Allow: /

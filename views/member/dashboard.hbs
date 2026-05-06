@@ -1,0 +1,63 @@
+<div>
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">My Posts</h1>
+    <a href="/posts/new" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm hover:bg-indigo-700">+ New Post</a>
+  </div>
+
+  {{#if posts.length}}
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Title</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Status</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Created</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {{#each posts}}
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-medium text-gray-900">{{title}}</td>
+          <td class="px-4 py-3">
+            {{#if (eq status 'draft')}}
+              <span class="inline-block text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">Draft</span>
+            {{else if (eq status 'pending_review')}}
+              <span class="inline-block text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full">Pending Review</span>
+            {{else if (eq status 'published')}}
+              <span class="inline-block text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Published</span>
+            {{else if (eq status 'rejected')}}
+              <span class="inline-block text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Rejected</span>
+            {{/if}}
+          </td>
+          <td class="px-4 py-3 text-gray-500">{{formatDate createdAt}}</td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              {{#if (eq status 'draft')}}
+                <a href="/posts/{{id}}/edit" class="text-indigo-600 hover:underline text-xs">Edit</a>
+                <form action="/posts/{{id}}?_method=DELETE" method="POST" class="inline">
+                  <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                  <button type="submit" class="text-red-600 hover:underline text-xs" onclick="return confirm('Delete this draft?')">Delete</button>
+                </form>
+                <form action="/posts/{{id}}/submit" method="POST" class="inline">
+                  <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                  <button type="submit" class="text-green-600 hover:underline text-xs">Submit</button>
+                </form>
+              {{/if}}
+              {{#if (eq status 'published')}}
+                <a href="/posts/{{slug}}" class="text-indigo-600 hover:underline text-xs">View</a>
+              {{/if}}
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}
+  <div class="text-center py-12 text-gray-400 bg-white border border-gray-200 rounded-lg">
+    <p class="text-lg">No posts yet.</p>
+    <a href="/posts/new" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">Create your first post →</a>
+  </div>
+  {{/if}}
+</div>

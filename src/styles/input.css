@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Tell Tailwind v4 to scan Handlebars templates and TS source */
+@source "../../views/**/*.hbs";
+@source "../**/*.ts";
+
+/* Prevent horizontal scroll caused by full-bleed elements */
+body { overflow-x: hidden; }
+
+/* Full-bleed: breaks out of any centered container to fill viewport width */
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+/* Post card image gradient color variations */
+.post-card:nth-child(3n+1) .post-card-img { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
+.post-card:nth-child(3n+2) .post-card-img { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
+.post-card:nth-child(3n)   .post-card-img { background: linear-gradient(135deg, #7c2d12, #f97316); }
+
+/* Category card icon color variations */
+.cat-card:nth-child(6n+1) .cat-icon { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
+.cat-card:nth-child(6n+2) .cat-icon { background: linear-gradient(135deg, #166534, #16a34a); }
+.cat-card:nth-child(6n+3) .cat-icon { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
+.cat-card:nth-child(6n+4) .cat-icon { background: linear-gradient(135deg, #7c2d12, #f97316); }
+.cat-card:nth-child(6n+5) .cat-icon { background: linear-gradient(135deg, #164e63, #0891b2); }
+.cat-card:nth-child(6n)   .cat-icon { background: linear-gradient(135deg, #831843, #db2777); }

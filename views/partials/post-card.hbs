@@ -1,0 +1,27 @@
+<article class="post-card border border-gray-200 rounded-lg bg-white hover:border-gray-900 hover:shadow-md transition-all flex flex-col h-full group">
+  <!-- Icon area -->
+  <div class="flex items-center justify-center h-20 bg-gray-50 border-b border-gray-200 rounded-t-lg group-hover:bg-gray-900 transition-colors">
+    <span class="text-3xl select-none">{{tagIcon (lookup (lookup . 'tags') '0.slug')}}</span>
+  </div>
+  <div class="p-4 flex flex-col flex-1">
+    <!-- Tag chips -->
+    {{#if tags.length}}
+    <div class="flex flex-wrap gap-1 mb-2">
+      {{#each tags}}
+      <a href="/tags/{{slug}}" class="text-xs font-mono bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded hover:bg-gray-900 hover:text-white transition-colors">#{{slug}}</a>
+      {{/each}}
+    </div>
+    {{/if}}
+    <!-- Title -->
+    <h2 class="font-semibold text-gray-900 text-sm leading-snug mb-2 line-clamp-2">
+      <a href="/posts/{{slug}}" class="hover:text-blue-600 transition-colors">{{title}}</a>
+    </h2>
+    <!-- Description -->
+    <p class="text-gray-500 text-xs leading-relaxed flex-1 line-clamp-3">{{excerpt body 160}}</p>
+    <!-- Footer -->
+    <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+      <span class="text-xs text-gray-400 font-mono">{{formatDate publishedAt}}</span>
+      <a href="/posts/{{slug}}" class="text-xs font-semibold text-blue-600 hover:underline">Đọc thêm →</a>
+    </div>
+  </div>
+</article>

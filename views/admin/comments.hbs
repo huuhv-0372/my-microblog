@@ -1,0 +1,54 @@
+<div class="max-w-5xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Comments Awaiting Moderation <span class="text-gray-400 text-lg">({{total}})</span></h1>
+    <a href="/admin" class="text-sm text-gray-500 hover:text-indigo-600">← Back to Dashboard</a>
+  </div>
+
+  {{#if comments.length}}
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Post</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Submitter</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Comment</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Date</th>
+          <th class="text-left px-4 py-3 font-medium text-gray-600">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {{#each comments}}
+        <tr class="hover:bg-gray-50 align-top">
+          <td class="px-4 py-3">
+            <a href="/posts/{{post.slug}}" class="text-indigo-600 hover:underline">{{post.title}}</a>
+          </td>
+          <td class="px-4 py-3 text-gray-600">
+            {{#if user}}{{user.username}}{{else}}{{displayName}} <span class="text-gray-400">({{email}})</span>{{/if}}
+          </td>
+          <td class="px-4 py-3 text-gray-700 max-w-xs">
+            <span class="line-clamp-2">{{excerpt body 100}}</span>
+          </td>
+          <td class="px-4 py-3 text-gray-500 whitespace-nowrap">{{formatDate createdAt}}</td>
+          <td class="px-4 py-3">
+            <div class="flex gap-2">
+              <form action="/admin/comments/{{id}}/approve" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                <button type="submit" class="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Approve</button>
+              </form>
+              <form action="/admin/comments/{{id}}/reject" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="{{../csrfToken}}" />
+                <button type="submit" class="text-xs bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">Reject</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}
+  <div class="text-center py-12 text-gray-400 bg-white border border-gray-200 rounded-lg">
+    <p>No comments pending moderation. 🎉</p>
+  </div>
+  {{/if}}
+</div>

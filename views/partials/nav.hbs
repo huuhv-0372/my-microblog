@@ -1,0 +1,68 @@
+﻿<nav class="bg-gray-900 text-gray-300">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-11">
+      <!-- Desktop links -->
+      <div class="hidden sm:flex items-center gap-0">
+        <a href="/" class="px-4 h-11 flex items-center text-sm font-medium text-white bg-gray-700 hover:bg-gray-600 transition-colors">Trang Chủ</a>
+        <div class="relative group">
+          <button class="px-4 h-11 flex items-center gap-1 text-sm hover:text-white hover:bg-gray-800 transition-colors">
+            Category
+            <svg class="w-3 h-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div class="absolute left-0 top-full hidden group-hover:block bg-white border border-gray-200 shadow-lg rounded-b z-50 min-w-40">
+            <a href="/tags/nestjs"     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">NestJS</a>
+            <a href="/tags/typescript" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">TypeScript</a>
+            <a href="/tags/tutorial"   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Tutorial</a>
+            <a href="/tags/css"        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">CSS</a>
+            <a href="/tags/database"   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Database</a>
+          </div>
+        </div>
+        <a href="/about" class="px-4 h-11 flex items-center text-sm hover:text-white hover:bg-gray-800 transition-colors">About Me</a>
+      </div>
+      <!-- Auth links (desktop) -->
+      <div class="hidden sm:flex items-center gap-1 text-sm">
+        {{#if user}}
+          <span class="px-3 h-11 flex items-center text-gray-400 text-xs">{{user.username}}</span>
+          <a href="/dashboard" class="px-3 h-11 flex items-center hover:text-white hover:bg-gray-800 transition-colors">Dashboard</a>
+          {{#if (eq user.role 'admin')}}
+          <a href="/admin" class="px-3 h-11 flex items-center hover:text-white hover:bg-gray-800 transition-colors">Admin</a>
+          {{/if}}
+          <form action="/logout" method="POST" class="inline">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+            <button type="submit" class="px-3 h-11 flex items-center hover:text-white hover:bg-gray-800 transition-colors">Đăng xuất</button>
+          </form>
+        {{else}}
+          <a href="/login"    class="px-3 h-11 flex items-center hover:text-white hover:bg-gray-800 transition-colors">Đăng nhập</a>
+          <a href="/register" class="px-3 h-11 flex items-center text-yellow-400 hover:text-yellow-300 font-semibold">Đăng ký</a>
+        {{/if}}
+      </div>
+      <!-- Mobile toggle -->
+      <button id="mobile-menu-btn" class="sm:hidden p-2 text-gray-300 hover:text-white" aria-label="Toggle menu">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden sm:hidden pb-3 border-t border-gray-700 pt-2 space-y-0.5">
+      <a href="/" class="block px-3 py-2 text-sm text-white bg-gray-700 rounded">Trang Chủ</a>
+      <a href="/tags/nestjs"     class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Category: NestJS</a>
+      <a href="/tags/typescript" class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Category: TypeScript</a>
+      <a href="/tags/tutorial"   class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Category: Tutorial</a>
+      <a href="/about"           class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">About Me</a>
+      {{#if user}}
+        <a href="/dashboard" class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Dashboard</a>
+        {{#if (eq user.role 'admin')}}
+        <a href="/admin" class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Admin</a>
+        {{/if}}
+        <form action="/logout" method="POST">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+          <button type="submit" class="block w-full text-left px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Đăng xuất</button>
+        </form>
+      {{else}}
+        <a href="/login"    class="block px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded">Đăng nhập</a>
+        <a href="/register" class="block px-3 py-2 text-sm text-yellow-400 hover:text-yellow-300 rounded font-semibold">Đăng ký</a>
+      {{/if}}
+    </div>
+  </div>
+</nav>

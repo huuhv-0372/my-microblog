@@ -1,0 +1,49 @@
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-2">{{post.title}}</h1>
+  <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-4">
+    <span>By {{post.author.username}}</span>
+    <span>·</span>
+    <span>{{formatDate post.publishedAt}}</span>
+    <span>·</span>
+    <span>{{commentCount}} comment{{#unless (eq commentCount 1)}}s{{/unless}}</span>
+  </div>
+
+  <div class="flex flex-wrap gap-1 mb-6">
+    {{#each post.tags}}
+    <a href="/tags/{{slug}}" class="inline-block text-xs bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full hover:bg-indigo-200">{{name}}</a>
+    {{/each}}
+  </div>
+
+  <div class="prose prose-gray max-w-none mb-10 whitespace-pre-wrap text-gray-800 leading-relaxed">
+    {{post.body}}
+  </div>
+
+  <hr class="border-gray-200 mb-8" />
+
+  <!-- Comments section -->
+  <section>
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Comments ({{commentCount}})</h2>
+    {{#if comments.length}}
+      <div class="space-y-4 mb-8">
+        {{#each comments}}
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-gray-700">
+              {{#if user}}{{user.username}}{{else}}{{displayName}}{{/if}}
+            </span>
+            <span class="text-xs text-gray-400">{{formatDate createdAt}}</span>
+          </div>
+          <p class="text-sm text-gray-700 whitespace-pre-wrap">{{body}}</p>
+        </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="text-gray-400 text-sm mb-8">No comments yet. Be the first!</p>
+    {{/if}}
+
+    <div id="comment-form">
+      {{> comment-form}}
+    </div>
+    <div id="comment-submitted"></div>
+  </section>
+</div>
